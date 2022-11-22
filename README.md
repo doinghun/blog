@@ -8,4 +8,4 @@
 - **CMS**: [Sanity](https://www.sanity.io/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 
-Credit to [Lee Robinson](https://github.com/leerob) for the [template]()
+Credit to [Lee Robinson](https://github.com/leerob) for the [template](https://github.com/leerob/leerob.io)
