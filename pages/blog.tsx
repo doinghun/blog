@@ -17,7 +17,7 @@ export default function Blog({
 
   return (
     <Container
-      title="Blog – Dohun Kims"
+      title="Blog – Dohun Kim"
       description="Thoughts on the software industry, programming, tech, and my personal life."
     >
       <div className="flex flex-col items-start justify-center max-w-2xl mx-auto mb-16">
