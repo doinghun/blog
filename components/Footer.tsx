@@ -42,14 +42,6 @@ export default function Footer() {
           </ExternalLink>
           <ExternalLink href="https://github.com/doinghun">GitHub</ExternalLink>
         </div>
-        <div className="flex flex-col space-y-4">
-          <Link
-            href="/tweets"
-            className="text-gray-500 hover:text-gray-600 transition"
-          >
-            Tweets
-          </Link>
-        </div>
       </div>
     </footer>
   );
