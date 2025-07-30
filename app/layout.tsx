@@ -33,6 +33,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  alternates: {
+    canonical: baseUrl,
+  },
 };
 
 const cx = (...classes: string[]) => classes.filter(Boolean).join(" ");
