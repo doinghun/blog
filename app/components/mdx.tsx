@@ -1,14 +1,23 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image, { ImageProps } from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { highlight } from "sugar-high";
 import React from "react";
 
-function Table({ data }) {
-  let headers = data.headers.map((header, index) => (
+interface TableData {
+  headers: string[];
+  rows: string[][];
+}
+
+interface TableProps {
+  data: TableData;
+}
+
+function Table({ data }: TableProps) {
+  const headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>
   ));
-  let rows = data.rows.map((row, index) => (
+  const rows = data.rows.map((row, index) => (
     <tr key={index}>
       {row.map((cell, cellIndex) => (
         <td key={cellIndex}>{cell}</td>
@@ -26,34 +35,56 @@ function Table({ data }) {
   );
 }
 
-function CustomLink(props) {
-  let href = props.href;
+interface CustomLinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string;
+  children: React.ReactNode;
+}
 
+function CustomLink({ href, children, ...props }: CustomLinkProps) {
   if (href.startsWith("/")) {
     return (
       <Link href={href} {...props}>
-        {props.children}
+        {children}
       </Link>
     );
   }
 
   if (href.startsWith("#")) {
-    return <a {...props} />;
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
   }
 
-  return <a target="_blank" rel="noopener noreferrer" {...props} />;
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+      {children}
+    </a>
+  );
 }
 
-function RoundedImage(props) {
-  return <Image alt={props.alt} className="rounded-lg" {...props} />;
+interface RoundedImageProps extends Omit<ImageProps, "className"> {
+  alt: string;
+  className?: string;
 }
 
-function Code({ children, ...props }) {
-  let codeHTML = highlight(children);
+function RoundedImage({ className, ...props }: RoundedImageProps) {
+  return <Image className={`rounded-lg ${className || ""}`} {...props} />;
+}
+
+interface CodeProps {
+  children: string;
+  [key: string]: unknown;
+}
+
+function Code({ children, ...props }: CodeProps) {
+  const codeHTML = highlight(children);
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
 
-function slugify(str) {
+function slugify(str: string): string {
   return str
     .toString()
     .toLowerCase()
@@ -64,9 +95,13 @@ function slugify(str) {
     .replace(/\-\-+/g, "-"); // Replace multiple - with single -
 }
 
-function createHeading(level) {
-  const Heading = ({ children }) => {
-    let slug = slugify(children);
+interface HeadingProps {
+  children: React.ReactNode;
+}
+
+function createHeading(level: number) {
+  const Heading = ({ children }: HeadingProps) => {
+    const slug = slugify(children as string);
     return React.createElement(
       `h${level}`,
       { id: slug },
@@ -86,7 +121,7 @@ function createHeading(level) {
   return Heading;
 }
 
-let components = {
+const components = {
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
@@ -99,11 +134,22 @@ let components = {
   Table,
 };
 
-export function CustomMDX(props) {
+interface CustomMDXProps {
+  source: string;
+  components?: Record<string, React.ComponentType<unknown>>;
+  [key: string]: unknown;
+}
+
+export function CustomMDX({
+  source,
+  components: customComponents,
+  ...props
+}: CustomMDXProps) {
   return (
     <MDXRemote
+      source={source}
+      components={{ ...components, ...(customComponents || {}) }}
       {...props}
-      components={{ ...components, ...(props.components || {}) }}
     />
   );
 }
