@@ -11,7 +11,7 @@
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
     "geist": "1.2.2",
-    "next": "^15.4.5",
+    "next": "15.4.10",
     "next-mdx-remote": "^4.4.1",
     "postcss": "^8.5.3",
     "react": "^19.1.1",
